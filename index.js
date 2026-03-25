@@ -1,27 +1,30 @@
 import express from "express";
 import categoriasmockRouter from "./routes/categoriasmock.js";
+import inicializarBase from "./models/inicializarBase.js"; 
+import categoriasRouter from "./routes/categorias.js";
 
 // crear servidor
 const app = express();
 
-//middleware para poder leer el json del post
+// middleware para poder leer el json del post
 app.use(express.json());
 
-// controlar ruta
+// controlar ruta base
 app.get("/", (req, res) => {
-res.send("Backend inicial dds-backend!");
+  res.send("Backend inicial!");
 });
+
+//Rutas
+app.use(categoriasmockRouter);
+app.use(categoriasRouter);
 
 // levantar servidor
 const port = 3000;
 app.locals.fechaInicio = new Date();
 
-// fecha y hora inicio de aplicacion
-app.listen(port, () => {
-console.log(`sitio escuchando en el puerto ${port}`);
+// Inicializamos la base, levantamos el sitio
+inicializarBase().then(() => {
+  app.listen(port, () => {
+    console.log(`Sitio escuchando en el puerto ${port}`);
+  });
 });
-
-//Una vez definido el controlador de nuestro recurso debemos vincularlo a nuestra aplicación
-//express, cargando el módulo de ruta en el archivo index.js antes de levantar el servidor
-//(app.listen...)
-app.use(categoriasmockRouter);
