@@ -2,23 +2,27 @@ import express from "express";
 import categoriasmockRouter from "./routes/categoriasmock.js";
 import inicializarBase from "./models/inicializarBase.js"; 
 import categoriasRouter from "./routes/categorias.js";
+import articulosRouter from "./routes/articulos.js";
+import cors from "cors";
 
 // crear servidor
 const app = express();
 
-// middleware para poder leer el json del post
-app.use(express.json());
+// Middlewares globales
+app.use(express.json()); // Para poder leer los JSON del POST
+app.use(cors({           // Para permitir conexiones desde el Frontend 
+  origin: "*", 
+}));
 
-// controlar ruta base
+// Rutas
 app.get("/", (req, res) => {
   res.send("Backend inicial!");
 });
-
-//Rutas
 app.use(categoriasmockRouter);
 app.use(categoriasRouter);
+app.use(articulosRouter);
 
-// levantar servidor
+// Levantar servidor
 const port = 3000;
 app.locals.fechaInicio = new Date();
 
