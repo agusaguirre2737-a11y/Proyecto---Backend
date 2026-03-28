@@ -29,3 +29,19 @@ export const authenticateJWT = (req, res, next) => {
     res.status(401).json({ message: "Acceso denegado. Faltan credenciales." });
   }
 };
+
+// Middleware para autorizar por roles (Recibe un array, ej: ["jefe", "admin"])
+export const authorizedRoles = (rolesPermitidos) => {
+  return (req, res, next) => {
+    // Agarramos los datos del usuario que el primer patovica (authenticateJWT) nos dejó en res.locals
+    const user = res.locals.user;
+
+    // Verificamos si el usuario existe y si su rol está incluido en el array de permitidos
+    if (user && rolesPermitidos.includes(user.rol)) {
+      next(); // Tiene permiso, lo dejamos pasar a la ruta
+    } else {
+      // No tiene permiso, lo rebotamos
+      res.status(403).json({ message: "¡Acceso denegado! Tu rol no tiene permiso para realizar esta acción." });
+    }
+  };
+};

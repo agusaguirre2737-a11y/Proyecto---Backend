@@ -44,7 +44,7 @@ router.post("/api/login", (req, res) => {
       message: "Bienvenido " + user.usuario + " (rol: " + user.rol + ")",
     });
   } else {
-    res.json({ message: "Usuario o clave incorrecto" });
+    res.status(401).json({ message: "Usuario o clave incorrectos" });
   }
 });
 
